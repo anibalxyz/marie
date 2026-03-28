@@ -164,7 +164,8 @@ public class MarieEditor extends JFrame {
 ******************************************************************************************/
     setIconImage(Toolkit.getDefaultToolkit()
                     .createImage(MarieEditor.class      // Set JFrame appearance
-                     .getResource("M.gif")));           // and behavior.
+                     .getResource("/M.gif")));
+           // and behavior.
     editorPane = (JPanel) this.getContentPane();
     editorPane.setLayout(new BorderLayout());
     this.setSize(new Dimension(700, 400));
@@ -622,7 +623,7 @@ public class MarieEditor extends JFrame {
 ******************************************************************************************/
     JFrame closingFrame = new JFrame("Confirm Overwrite");
     closingFrame.setIconImage(Toolkit.getDefaultToolkit()
-                      .createImage(MarieSim.class.getResource("M.gif")));
+                      .createImage(MarieSim.class.getResource("/M.gif")));
     int option = JOptionPane
                     .showOptionDialog(closingFrame, "Rewrite "+currFileName+"?",
                                       "Rewrite Confirmation", JOptionPane.YES_NO_OPTION,
@@ -802,7 +803,7 @@ public class MarieEditor extends JFrame {
 ******************************************************************************************/
     JFrame closingFrame = new JFrame("Confirm Editor Quit");
     closingFrame.setIconImage(Toolkit.getDefaultToolkit()
-                      .createImage(MarieSim.class.getResource("M.gif")));
+                      .createImage(MarieSim.class.getResource("/M.gif")));
     int option = JOptionPane
                     .showOptionDialog(closingFrame, "Really quit editor?",
                                       "Quit Editor Confirmation", JOptionPane.YES_NO_OPTION,

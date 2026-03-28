@@ -58,7 +58,8 @@ public class TextFileViewer extends JFrame {
   final static Color    FOREGROUND = Color.black;
   final static Insets      MARGINS = new Insets(5, 5, 10, 5);  // top, left, bottom, right
   final static String HTML_CONTENT = "text/html";
-  final static String   ICON_IMAGE = "M.gif";
+  final static String   ICON_IMAGE = "/M.gif";
+
   final static String HTMLFILE_EXT = ".htm";
   final static String      newLine = System.getProperty("line.separator");
   static String      fileName;
@@ -153,103 +154,56 @@ public class TextFileViewer extends JFrame {
   } // TextFileViewer()
 
   void getHTMLContent(String aFile) {
-/******************************************************************************************
-*   This method loads the JEditorPane with HTML content found in the filename passed      *
-*   as an argument.  When plain text (non-HTML) content needs to be displayed, the        *
-*   getTextContent() method should be called first.                                       *
-******************************************************************************************/
-    try {         
-      InputStream fileIn = new FileInputStream(aFile);
+    try {
+      InputStream fileIn = null;
+      File f = new File(aFile);
+      if (f.exists()) {
+        fileIn = new FileInputStream(f);
+      } else {
+        fileIn = TextFileViewer.class.getResourceAsStream("/" + aFile);
+      }
+      if (fileIn == null) throw new IOException("File not found: " + aFile);
       displayArea.read(fileIn, null);
+      fileIn.close();
     }
     catch (IOException e) {
-      displayArea.setText(newLine+e); 
+      displayArea.setText(newLine+e);
       return;
     }
   } // getHTMLContent()
 
   void getTextContent(String aTextFile, Object app) {
-/******************************************************************************************
-*  This method translates a plain text file to a preformatted HTML file by prepending     *
-*  and appending the appropriate tags.  Once these tags have been added, the modified     *
-*  text file is used for input by the getHTMLContent() method so that the plain text can  *
-*  be displayed properly in a JEditorPane.  When JEditorPane reads a plain text file,     *
-*  it exhibits the same "scroll-to-the-bottom" behavior as JTextPane.  HTML content       *
-*  prevents this scrolling (!).  The temporary file that is used as input for the HTML    *
-*  input is deleted before this method terminates.                                        *
-*                                                                                         *
-*  April 2006 Update:  The MARIE package has been modified to allow the simulator to      *
-*                      run from an executable JAR file. In order to be able to read help  *
-*                      files, etc., from the archive, the path qualification has to be    *
-*                      removed. However, we still need to be able to read a qualified     *
-*                      file name for MARIE assembly listings, etc. This is handled in a   *
-*                      try..catch sequence that first tries to open straightforwardly     *
-*                      whatever file name is passed to this routine. If that file cannot  *
-*                      be found, then we attempt to open it as a "reource," which is how  *
-*                      JAR file contents must be accessed. If neither one can be opened,  *
-*                      the "file not found" message is displayed.                         *
-******************************************************************************************/
-        
     BufferedReader textFile = null;
-    BufferedWriter tempFile = null;  
-    InputStream in;
+    InputStream in = null;
 
-    boolean done = false;
-    in = TextFileViewer.class.getResourceAsStream(aTextFile);
-    
-    try {                                             // Try to open the input.
-      textFile = new BufferedReader( new FileReader(aTextFile) );
-         } // try
-    catch (FileNotFoundException e) {  
-      try {                               // Try to open input as a JAR resource.
-        textFile = new BufferedReader(new InputStreamReader(in));      
-      } // try
-      catch (Exception e1) {        
-        displayArea.setText("<HTML>File " + e.getMessage() + " not found.</HTML>");
-        return;
-      } // catch
-    } // catch
-    try {                                             // Try to open the output.
-      tempFile = new BufferedWriter( new FileWriter("TextFileViewer.out") );
-      tempFile.write("<HTML><PRE>");                  // Set initial HTML tags.
-    } // try
-    catch (FileNotFoundException e) {
-      System.err.println(newLine+"Error!  Cannot create file display.");
+    File f = new File(aTextFile);
+    if (f.exists()) {
+      try {
+        in = new FileInputStream(f);
+      } catch (FileNotFoundException e) {}
+    } else {
+      in = TextFileViewer.class.getResourceAsStream("/" + aTextFile);
+    }
+
+    if (in == null) {
+      displayArea.setText("<HTML>File " + aTextFile + " not found.</HTML>");
       return;
-    } // catch
-    catch (IOException e) {
-      System.err.println(newLine+"Error!  Cannot create file display.");
-      return;
-    } // catch
-    while (!done) {                                   // Loop through text file input.
-      try {                                           // until end of file found.
-          String inputLine = textFile.readLine(); 
-          if (inputLine != null) {
-             tempFile.write(inputLine+newLine);
-          }
-          else {
-            done = true;
-          }
-      } // try
-      catch (EOFException e) {
-        done = true;
-      } // catch
-      catch (IOException e) {
-        done = true;
-      } // catch
-    } // while
-    try {                                             // Close source file.
-       textFile.close();                              // Append HTML tags on the output.
-       tempFile.write("</PRE></HTML>");
-       tempFile.flush();
-       tempFile.close();
-    } // try
-    catch (IOException e) {
-       ;
-    } // catch
-    getHTMLContent("TextFileViewer.out");             // Load the reformatted content
-    File aFile = new File("TextFileViewer.out");      // into the display pane and
-    aFile.delete();                                   // delete the output file.
+    }
+
+    textFile = new BufferedReader(new InputStreamReader(in));
+    StringBuilder sb = new StringBuilder("<HTML><PRE>");
+    try {
+      String inputLine;
+      while ((inputLine = textFile.readLine()) != null) {
+        sb.append(inputLine).append(newLine);
+      }
+      sb.append("</PRE></HTML>");
+      displayArea.setText(sb.toString());
+      displayArea.setCaretPosition(0);
+      textFile.close();
+    } catch (IOException e) {
+      displayArea.setText("<HTML>Error reading file: " + e.getMessage() + "</HTML>");
+    }
   } // getTextContent()
 
 void printContent() { 

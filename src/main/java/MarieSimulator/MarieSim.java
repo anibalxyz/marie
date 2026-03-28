@@ -277,7 +277,7 @@ public class MarieSim extends JFrame {
       delayPane.setPreferredSize(new Dimension(350, 150));
       delayPane.setLayout(new FlowLayout());
       setIconImage(Toolkit.getDefaultToolkit()
-                             .createImage(MarieSim.class.getResource("M.gif")));
+                             .createImage(MarieSim.class.getResource("/M.gif")));
       setStatusMessage(" Execution delay set at "
                              +delay+" milliseconds.");      // Message in parent frame.
       sliderLabel.setPreferredSize(new Dimension(300, 50)); // Slider instructions.
@@ -389,7 +389,7 @@ public class MarieSim extends JFrame {
         } // windowClosing()
       }); // Listener
       setIconImage(Toolkit.getDefaultToolkit()
-                             .createImage(MarieSim.class.getResource("M.gif")));
+                             .createImage(MarieSim.class.getResource("/M.gif")));
       setSize(new Dimension(500, 300));
       dumpPane.setPreferredSize(new Dimension(450, 150));
       dumpPane.setLayout(new FlowLayout());
@@ -536,7 +536,7 @@ public class MarieSim extends JFrame {
     enableEvents(AWTEvent.WINDOW_EVENT_MASK);
     mainPanel.setLayout(new BorderLayout());
 
-    logo = new ImageIcon(MarieDPath.class.getResource("ECOA.jpg"));
+    logo = new ImageIcon(MarieSim.class.getResource("/ECOA.jpg"));
 
     logoPanel.setLayout(new FlowLayout());            // Build the logo panel.
     logoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -767,7 +767,7 @@ public class MarieSim extends JFrame {
 ******************************************************************************************/
     setSize(new Dimension(780, 550));
     setIconImage(Toolkit.getDefaultToolkit()
-                          .createImage(MarieSim.class.getResource("M.gif")));
+                          .createImage(MarieSim.class.getResource("/M.gif")));
     setTitle("MARIE Simulator");
     enableEvents(AWTEvent.WINDOW_EVENT_MASK);
     simulatorPane = (JPanel) this.getContentPane();
@@ -1632,7 +1632,7 @@ public class MarieSim extends JFrame {
 ******************************************************************************************/
     JFrame resetFrame = new JFrame("Confirm Reset");
     resetFrame.setIconImage(Toolkit.getDefaultToolkit()
-                      .createImage(MarieSim.class.getResource("M.gif")));
+                      .createImage(MarieSim.class.getResource("/M.gif")));
     int option = JOptionPane
                     .showOptionDialog(resetFrame, "Are you sure?",
                                       "Reset Confirmation", JOptionPane.YES_NO_OPTION,
@@ -1861,7 +1861,7 @@ public class MarieSim extends JFrame {
 ******************************************************************************************/
     JFrame closingFrame = new JFrame("Confirm Quit");
     closingFrame.setIconImage(Toolkit.getDefaultToolkit()
-                      .createImage(MarieSim.class.getResource("M.gif")));
+                      .createImage(MarieSim.class.getResource("/M.gif")));
     int option = JOptionPane
                     .showOptionDialog(closingFrame, "Really quit?",
                                       "Quit Confirmation", JOptionPane.YES_NO_OPTION,
