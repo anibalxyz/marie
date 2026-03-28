@@ -1,0 +1,9 @@
+.idea/
+target/
+*.class
+*.mex
+*.lst
+*.map
+GEMINI_PLAN.md
+.java_runtime/
+apache-maven-*/
