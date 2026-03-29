@@ -147,6 +147,9 @@ public class MarieSim extends JFrame {
   int      errorCode = 0;
   JPanel simulatorPane;
 
+  public boolean exitOnClose = true;
+  public JFrame  linkedWindow = null;
+
   JMenuBar       controlBar = new JMenuBar();  // Container for the menu as follows:
   JMenu            fileMenu = new JMenu();        // "File" menu
   JMenuItem    loadFileItem = new JMenuItem();    //       | load program
@@ -764,6 +767,11 @@ public class MarieSim extends JFrame {
 
 
   public MarieSim() {
+    this(true);
+  }
+
+  public MarieSim(boolean exitMode) {
+    this.exitOnClose = exitMode;
 /******************************************************************************************
 *  This is the constructor for the GUI simulator.  Components are defined and populated   *
 *  in the order in which they appear on the screen:  left-to-right, top-to-bottom.        *
@@ -998,9 +1006,16 @@ public class MarieSim extends JFrame {
     openDataPathItem.setText("Data Path Simulator");
     openDataPathItem.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        if (linkedWindow != null && linkedWindow.isVisible()) {
+          linkedWindow.toFront();
+          linkedWindow.requestFocus();
+          return;
+        }
         new Thread() {
           public void run() {
-            MarieDPath dPath = new MarieDPath();
+            MarieDPath dPath = new MarieDPath(false);
+            dPath.linkedWindow = MarieSim.this;
+            linkedWindow = dPath;
             dPath.show();
           }
         }.start();
@@ -1885,8 +1900,12 @@ public class MarieSim extends JFrame {
                                       "Quit Confirmation", JOptionPane.YES_NO_OPTION,
                                       JOptionPane.QUESTION_MESSAGE, null,
                                        new Object[] {"Yes", "No"}, "Yes");
-    if (option == JOptionPane.YES_OPTION)
-      System.exit(0);
+    if (option == JOptionPane.YES_OPTION) {
+      if (exitOnClose)
+        System.exit(0);
+      else
+        dispose();
+    }
  } // exitProgram()
 
 

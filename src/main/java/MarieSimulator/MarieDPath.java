@@ -144,6 +144,10 @@ public class MarieDPath extends JFrame {
   static String statusMessage = null;
     
   JPanel dataPathSimPane;
+
+  public boolean exitOnClose = true;
+  public JFrame  linkedWindow = null;
+
   JMenuBar       controlBar = new JMenuBar();  // Container for the menu as follows:
   JMenu            fileMenu = new JMenu();        // "File" menu
   JMenuItem    loadFileItem = new JMenuItem();    //       | load program
@@ -930,6 +934,11 @@ public class MarieDPath extends JFrame {
   } // DataPathPanel
 
   public MarieDPath() {
+    this(true);
+  }
+
+  public MarieDPath(boolean exitMode) {
+    this.exitOnClose = exitMode;
 /******************************************************************************************
 *  This is the constructor for the simulator frame.  It populates the screen with a       *
 *  menu bar and two frames: one for the graphics, and one for the execution monitor.      *
@@ -1107,9 +1116,16 @@ public class MarieDPath extends JFrame {
     openMarieSimItem.setText("MARIE Simulator");
     openMarieSimItem.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        if (linkedWindow != null && linkedWindow.isVisible()) {
+          linkedWindow.toFront();
+          linkedWindow.requestFocus();
+          return;
+        }
         new Thread() {
           public void run() {
-            MarieSim sim = new MarieSim();
+            MarieSim sim = new MarieSim(false);
+            sim.linkedWindow = MarieDPath.this;
+            linkedWindow = sim;
             sim.show();
           }
         }.start();
@@ -1495,8 +1511,12 @@ public class MarieDPath extends JFrame {
                                       "Quit Confirmation", JOptionPane.YES_NO_OPTION,
                                       JOptionPane.QUESTION_MESSAGE, null,
                                        new Object[] {"Yes", "No"}, "Yes");
-    if (option == JOptionPane.YES_OPTION)
-      System.exit(0);
+    if (option == JOptionPane.YES_OPTION) {
+      if (exitOnClose)
+        System.exit(0);
+      else
+        dispose();
+    }
  } // exitProgram()
 
   void setStatusMessage(String msg) {
