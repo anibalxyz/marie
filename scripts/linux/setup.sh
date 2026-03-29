@@ -14,6 +14,38 @@ success() { echo -e "${GREEN}[OK]${NC} $1"; }
 warn()    { echo -e "${YELLOW}[ADVERTENCIA]${NC} $1"; }
 error()   { echo -e "${RED}[ERROR]${NC} $1"; }
 
+ensure_curl() {
+    if command -v curl >/dev/null 2>&1; then
+        return 0
+    fi
+
+    warn "curl no está instalado. Es necesario para descargar dependencias."
+
+    if command -v apt-get >/dev/null 2>&1; then
+        log "Instalando curl vía apt..."
+        sudo apt-get update && sudo apt-get install -y curl || {
+            error "No se pudo instalar curl."
+            exit 1
+        }
+    elif command -v dnf >/dev/null 2>&1; then
+        log "Instalando curl vía dnf..."
+        sudo dnf install -y curl || {
+            error "No se pudo instalar curl."
+            exit 1
+        }
+    else
+        error "No se pudo instalar curl automáticamente. Instálelo manualmente."
+        exit 1
+    fi
+
+    if ! command -v curl >/dev/null 2>&1; then
+      error "curl no está disponible tras la instalación."
+      exit 1
+    fi
+
+    success "curl instalado correctamente."
+}
+
 PROJECT_ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 
 echo -e "${BLUE}==================================================${NC}"
@@ -85,6 +117,7 @@ read -p "Opción [1-4]: " INSTALL_CHOICE
 
 case $INSTALL_CHOICE in
     1)
+        ensure_curl
         log "Iniciando instalación portable..."
         INSTALL_DIR="$PROJECT_ROOT/.java_runtime"
         mkdir -p "$INSTALL_DIR"
@@ -170,6 +203,7 @@ case $INSTALL_CHOICE in
         success "Instalación global completada con éxito."
         ;;
     3)
+      ensure_curl
 	    SDKMAN_INIT="$HOME/.sdkman/bin/sdkman-init.sh"
 
     	if [ -s "$SDKMAN_INIT" ]; then
