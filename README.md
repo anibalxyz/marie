@@ -60,13 +60,11 @@ Si no lo tienes, ejecuta el script de configuración. Te pedirá elegir entre in
 ./scripts/linux/setup.sh
 ```
 
-- **Windows** — haz doble clic en `scripts\windows\setup.ps1` y selecciona **"Ejecutar con PowerShell"**.
-  > [!WARNING]
-  > Si Windows bloquea la ejecución, abre PowerShell en la carpeta del proyecto y ejecuta:
-  >
-  > ```powershell
-  > powershell -ExecutionPolicy Bypass -File scripts\windows\setup.ps1
-  > ```
+- **Windows** — haz clic derecho en `scripts\windows\setup.ps1` y selecciona **"Ejecutar con PowerShell"**. Si aparece un aviso de seguridad, haz clic en **"Abrir"**.
+  También puedes ejecutarlo desde una terminal PowerShell (los argumentos `-ExecutionPolicy Bypass` permiten saltarse el aviso de seguridad):
+```powershell
+  powershell -ExecutionPolicy Bypass -File scripts\windows\setup.ps1
+```
 
 ---
 
@@ -78,16 +76,18 @@ Si no lo tienes, ejecuta el script de configuración. Te pedirá elegir entre in
 ./scripts/linux/build.sh
 ```
 
-- **Windows** — puedes hacer doble clic en `scripts\windows\build.ps1`, o ejecutarlo desde una terminal:
+- **Windows** — haz clic derecho en `scripts\windows\build.ps1` y selecciona **"Ejecutar con PowerShell"**. Si aparece un aviso de seguridad, haz clic en **"Abrir"**.
+  También puedes ejecutarlo desde una terminal PowerShell:
 
-```cmd
-scripts\windows\build.ps1
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\windows\build.ps1
 ```
 
 ---
 
 ### 3. Ejecutar el Simulador
 
+> [!TIP]
 > Este paso ejecuta el simulador directamente desde la terminal. El método recomendado es crear un acceso directo en el escritorio (ver paso 4).
 
 - **Linux** — ejecuta en la terminal:
@@ -96,10 +96,11 @@ scripts\windows\build.ps1
 ./scripts/linux/run.sh
 ```
 
-- **Windows** — puedes hacer doble clic en `scripts\windows\run.ps1`, o ejecutarlo desde una terminal:
+- **Windows** — haz clic derecho en `scripts\windows\run.ps1` y selecciona **"Ejecutar con PowerShell"**. Si aparece un aviso de seguridad, haz clic en **"Abrir"**.
+  También puedes ejecutarlo desde una terminal PowerShell:
 
-```cmd
-scripts\windows\run.ps1
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\windows\run.ps1
 ```
 
 ---
@@ -114,9 +115,12 @@ Crea un ícono en tu escritorio para abrir el simulador fácilmente. Internament
 ./scripts/linux/create-shortcut.sh
 ```
 
-- **Windows** — haz clic derecho en `scripts\windows\create-shortcut.ps1` y selecciona **"Ejecutar con PowerShell"**.
-  > [!WARNING]
-  > Si Windows bloquea la ejecución, usa el mismo comando `Bypass` mencionado en el paso 1.
+- **Windows** — haz clic derecho en `scripts\windows\create-shortcut.ps1` y selecciona **"Ejecutar con PowerShell"**. Si aparece un aviso de seguridad, haz clic en **"Abrir"**.
+  También puedes ejecutarlo desde una terminal PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\windows\create-shortcut.ps1
+```
 
 ---
 
