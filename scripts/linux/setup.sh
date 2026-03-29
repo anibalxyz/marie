@@ -28,19 +28,19 @@ echo "3) Salir / Ya tengo Java instalado"
 read -p "Opción [1-3]: " TYPE_CHOICE
 
 case $TYPE_CHOICE in
+    1)
+        JAVA_TYPE="jre"
+        JAVA_CMD_CHECK="java"
+        log "Has seleccionado instalar un JRE."
+        ;;
     2)
         JAVA_TYPE="jdk"
         JAVA_CMD_CHECK="javac"
         log "Has seleccionado instalar un JDK."
         ;;
-    3)
+    *)
         log "Saliendo. No se realizaron cambios."
         exit 0
-        ;;
-    *)
-        JAVA_TYPE="jre"
-        JAVA_CMD_CHECK="java"
-        log "Has seleccionado instalar un JRE."
         ;;
 esac
 
@@ -77,9 +77,9 @@ fi
 
 # 3. Elección de método de instalación
 echo -e "\n¿Cómo desea instalar Java?"
-echo "1) Portable (Descargar dentro de la carpeta del proyecto, no requiere admin)"
-echo "2) Global vía Administrador de Paquetes (apt o dnf, requiere sudo)"
-echo "3) Global vía SDKMAN (No requiere admin)"
+echo "1) Portable (Descargar dentro de la carpeta del proyecto; no requiere admin)"
+echo "2) Global vía Administrador de Paquetes (apt o dnf; requiere sudo)"
+echo "3) Global vía SDKMAN (JDK completo, no JRE solo; no requiere admin)"
 echo "4) Salir / Ya tengo Java instalado"
 read -p "Opción [1-4]: " INSTALL_CHOICE
 
@@ -133,6 +133,25 @@ case $INSTALL_CHOICE in
                 error "Error al instalar via dnf."
                 exit 1
             fi
+
+            # Verificar si el java activo apunta a la versión no-headless recién instalada
+            JAVA_21_BIN="/usr/lib/jvm/java-21-openjdk/bin/java"
+            CURRENT_JAVA=$(readlink -f "$(which java)" 2>/dev/null)
+            if [ -f "$JAVA_21_BIN" ] && [ "$CURRENT_JAVA" != "$JAVA_21_BIN" ]; then
+                warn "Tu sistema tiene otra versión de Java como predeterminada ($CURRENT_JAVA)."
+                warn "Si esa versión es headless, MARIE no podrá mostrar su interfaz gráfica."
+                echo "¿Deseas cambiar la versión activa de Java a la recién instalada (con soporte gráfico garantizado)?"
+                echo "1) Sí, cambiar"
+                echo "2) No (si tu versión actual es headless, MARIE no podrá ejecutarse)"
+                read -p "Opción [1-2]: " ALT_CHOICE
+                if [ "$ALT_CHOICE" == "1" ]; then
+                    sudo alternatives --set java "$JAVA_21_BIN"
+                    success "Java 21 configurado como versión activa."
+                else
+                    warn "No se realizaron cambios. Si tu versión activa de Java es headless, MARIE no podrá mostrar su interfaz gráfica."
+                fi
+            fi
+
         elif command -v apt-get &> /dev/null; then
             log "Detectado Debian/Ubuntu (apt). Requiere privilegios de administrador (sudo)."
             PKG="openjdk-21-$([ "$JAVA_TYPE" == "jdk" ] && echo "jdk" || echo "jre")"
@@ -151,23 +170,29 @@ case $INSTALL_CHOICE in
         success "Instalación global completada con éxito."
         ;;
     3)
-        if ! command -v sdk &> /dev/null; then
-            log "SDKMAN no detectado. Instalando SDKMAN primero..."
-            if ! curl -s "https://get.sdkman.io" | bash; then
-                error "Error al instalar SDKMAN."
-                exit 1
-            fi
-            export SDKMAN_DIR="$HOME/.sdkman"
-            [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-        fi
+	    SDKMAN_INIT="$HOME/.sdkman/bin/sdkman-init.sh"
+
+    	if [ -s "$SDKMAN_INIT" ]; then
+	      log "SDKMAN detectado. Inicializando..."
+	      source "$SDKMAN_INIT"
+    	else
+  	    log "SDKMAN no detectado. Instalando SDKMAN primero..."
+	      if ! curl -s "https://get.sdkman.io" | bash; then
+	      	error "Error al instalar SDKMAN."
+	    	  exit 1
+	      fi
+  	    export SDKMAN_DIR="$HOME/.sdkman"
+  	    source "$SDKMAN_DIR/bin/sdkman-init.sh"
+      fi
         log "Instalando Java 21 vía SDKMAN..."
-        if ! sdk install java 21-tem; then
-            error "Error al instalar Java mediante SDKMAN."
-            exit 1
+        if ! sdk install java 21.0.10-tem; then
+          error "Error al instalar Java mediante SDKMAN."
+          exit 1
         fi
         success "Instalación vía SDKMAN completada."
-        warn "NOTA: Para usar 'java' o 'sdk' en esta terminal, ejecute: source ~/.bashrc"
-        warn "O simplemente abra una nueva terminal."
+        log "NOTA: Para usar 'java' o 'sdk' manualmente en esta terminal, ejecute: source ~/.bashrc"
+        log "O simplemente abra una nueva terminal."
+        log "Los scripts del proyecto no dependen de esto (usan rutas directas)."
         ;;
     *)
         log "Saliendo de la configuración."
