@@ -126,4 +126,8 @@ powershell -ExecutionPolicy Bypass -File scripts\windows\create-shortcut.ps1
 
 ## 📖 Documentación Original
 
-La documentación del repositorio del cual se hizo este fork (que a su vez es un fork del proyecto MARIE original) se encuentra en [ORIGINAL_README.md](ORIGINAL_README.md). El historial completo de cambios puede consultarse en el log de commits.
+Este repositorio es un fork de otro repositorio, que a su vez deriva del proyecto original MARIE.
+
+La documentación original (correspondiente al fork intermedio, no al proyecto original) se conserva en [ORIGINAL_README.md](/old-repo/ORIGINAL_README.md). En la carpeta [old-repo](/old-repo/) se incluyen algunos archivos heredados que no forman parte del funcionamiento actual del proyecto. Se mantienen sin modificaciones y únicamente con fines de referencia, ya que no son necesarios para la ejecución ni para el uso principal.
+
+El historial completo de cambios —incluyendo tanto los introducidos en este repositorio como los heredados del fork anterior (excluyendo el proyecto original)— puede consultarse en el log de commits.
