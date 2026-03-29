@@ -35,7 +35,7 @@ Haz clic en el botón verde **"Code"** en la página del repositorio y seleccion
 
 #### Camino A: usar el ejecutable precompilado (recomendado)
 
-No necesitas compilar nada. Simplemente descarga el archivo `marie.jar` desde la sección de [Releases](https://github.com/anibalxyz/marie/releases).
+No necesitas compilar nada. Simplemente descarga el archivo `marie.jar` desde la sección de [Releases](https://github.com/anibalxyz/marie/releases) y colócalo dentro de la carpeta del proyecto.
 
 Sigue los pasos 1, 3 y 4 de esta guía.
 
@@ -57,15 +57,15 @@ Si no lo tienes, ejecuta el script de configuración. Te pedirá elegir entre in
 - **Linux** — ejecuta en la terminal:
 
 ```bash
-./setup-linux.sh
+./scripts/linux/setup.sh
 ```
 
-- **Windows** — haz doble clic en `setup-windows.ps1` y selecciona **"Ejecutar con PowerShell"**.
+- **Windows** — haz doble clic en `scripts\windows\setup.ps1` y selecciona **"Ejecutar con PowerShell"**.
   > [!WARNING]
   > Si Windows bloquea la ejecución, abre PowerShell en la carpeta del proyecto y ejecuta:
   >
   > ```powershell
-  > powershell -ExecutionPolicy Bypass -File setup-windows.ps1
+  > powershell -ExecutionPolicy Bypass -File scripts\windows\setup.ps1
   > ```
 
 ---
@@ -75,13 +75,13 @@ Si no lo tienes, ejecuta el script de configuración. Te pedirá elegir entre in
 - **Linux** — ejecuta en la terminal:
 
 ```bash
-./build.sh
+./scripts/linux/build.sh
 ```
 
-- **Windows** — puedes hacer doble clic en `build.bat`, o ejecutarlo desde una terminal:
+- **Windows** — puedes hacer doble clic en `scripts\windows\build.bat`, o ejecutarlo desde una terminal:
 
 ```cmd
-build.bat
+scripts\windows\build.bat
 ```
 
 ---
@@ -93,13 +93,13 @@ build.bat
 - **Linux** — ejecuta en la terminal:
 
 ```bash
-./run.sh
+./scripts/linux/run.sh
 ```
 
-- **Windows** — puedes hacer doble clic en `run.bat`, o ejecutarlo desde una terminal:
+- **Windows** — puedes hacer doble clic en `scripts\windows\run.bat`, o ejecutarlo desde una terminal:
 
 ```cmd
-run.bat
+scripts\windows\run.bat
 ```
 
 ---
@@ -111,10 +111,10 @@ Crea un ícono en tu escritorio para abrir el simulador fácilmente. Internament
 - **Linux** — ejecuta en la terminal:
 
 ```bash
-./create-shortcut-linux.sh
+./scripts/linux/create-shortcut.sh
 ```
 
-- **Windows** — haz clic derecho en `create-shortcut-windows.ps1` y selecciona **"Ejecutar con PowerShell"**.
+- **Windows** — haz clic derecho en `scripts\windows\create-shortcut.ps1` y selecciona **"Ejecutar con PowerShell"**.
   > [!WARNING]
   > Si Windows bloquea la ejecución, usa el mismo comando `Bypass` mencionado en el paso 1.
 

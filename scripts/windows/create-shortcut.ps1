@@ -20,14 +20,14 @@ Write-Host "   Generador de Acceso Directo MARIE Simulator    " -ForegroundColor
 Write-Host "==================================================" -ForegroundColor Blue
 
 # 1. Rutas
-$projectDir = Get-Location
-$execPath = Join-Path $projectDir "run.bat"
-$iconPath = Join-Path $projectDir "src\main\resources\M.ico"
+$projectRoot = (Get-Item -Path $PSScriptRoot).Parent.Parent.FullName
+$execPath = Join-Path $projectRoot "scripts\windows\run.bat"
+$iconPath = Join-Path $projectRoot "src\main\resources\M.ico"
 $shortcutPath = Join-Path ([Environment]::GetFolderPath("Desktop")) "MARIE Simulator.lnk"
 
 # 2. Verificar que run.bat existe
 if (-not (Test-Path $execPath)) {
-    Write-Error-Custom "No se encontró run.bat. Por favor, asegúrese de estar en la raíz del proyecto."
+    Write-Error-Custom "No se encontró run.bat en $execPath."
     exit 1
 }
 
@@ -39,7 +39,7 @@ try {
     $shortcut = $shell.CreateShortcut($shortcutPath)
     $shortcut.TargetPath = "cmd.exe"
     $shortcut.Arguments = "/c `"$execPath`""
-    $shortcut.WorkingDirectory = $projectDir
+    $shortcut.WorkingDirectory = $projectRoot
     $shortcut.IconLocation = $iconPath
     $shortcut.WindowStyle = 7
     $shortcut.Description = "Simulador de arquitectura MARIE"

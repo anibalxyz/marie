@@ -12,10 +12,11 @@ log() { echo -e "${BLUE}[INFO]${NC} $1"; }
 error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 # 1. Determinar el comando de Java a usar
+PROJECT_ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 SDKMAN_JAVA="$HOME/.sdkman/candidates/java/current/bin/java"
 
-if [ -f "./.java_runtime/bin/java" ]; then
-    JAVA_CMD="./.java_runtime/bin/java"
+if [ -f "$PROJECT_ROOT/.java_runtime/bin/java" ]; then
+    JAVA_CMD="$PROJECT_ROOT/.java_runtime/bin/java"
     log "Usando Java portable (.java_runtime)."
 elif [ -f "$SDKMAN_JAVA" ]; then
     JAVA_CMD="$SDKMAN_JAVA"
@@ -24,14 +25,14 @@ elif command -v java >/dev/null 2>&1; then
     JAVA_CMD="java"
     log "Usando Java del sistema."
 else
-    error "No se encontró Java. Por favor ejecute ./setup-linux.sh primero."
+    error "No se encontró Java. Por favor ejecute ./scripts/linux/setup.sh primero."
     exit 1
 fi
 
 # 2. Verificar que exista el JAR
-JAR_FILE="target/marie.jar"
+JAR_FILE="$PROJECT_ROOT/target/marie.jar"
 if [ ! -f "$JAR_FILE" ]; then
-    error "No se encontró el archivo $JAR_FILE. Por favor ejecute ./build.sh primero."
+    error "No se encontró el archivo $JAR_FILE. Por favor ejecute ./scripts/linux/build.sh primero."
     exit 1
 fi
 
