@@ -178,6 +178,9 @@ public class MarieSim extends JFrame {
   JButton        showSymbols = new JButton();     // Symbol table display button
   TextFileViewer symbolTable;                     //       |  (symbol table frame)
 
+  JMenu          simulatorsMenu = new JMenu();    // "Simulators" menu
+  JMenuItem    openDataPathItem = new JMenuItem();    //       | open Data Path Simulator
+
   JMenu      helpMenu = new JMenu();              // Help menu
   JMenuItem   getHelp = new JMenuItem();          //       | general instructions
   TextFileViewer helpViewer;                      //       |   shown in this viewer
@@ -991,6 +994,20 @@ public class MarieSim extends JFrame {
       }
     }); // Listener
 
+    simulatorsMenu.setText("Simulators");
+    openDataPathItem.setText("Data Path Simulator");
+    openDataPathItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        new Thread() {
+          public void run() {
+            MarieDPath dPath = new MarieDPath();
+            dPath.show();
+          }
+        }.start();
+      }
+    });
+    simulatorsMenu.add(openDataPathItem);
+
    getHelp.setText("Help");
     getHelp.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -1015,6 +1032,7 @@ public class MarieSim extends JFrame {
     controlBar.add(step);
     controlBar.add(breakpointMenu);
     controlBar.add(showSymbols);
+    controlBar.add(simulatorsMenu);
     controlBar.add(helpMenu);
     setJMenuBar(controlBar);
 

@@ -158,6 +158,9 @@ public class MarieDPath extends JFrame {
   DelayFrame     delayFrame;                      //       |  (frame to enter delay)
   JButton       setFastFetch = new JButton();     // Turns fast fetch mode off or on.
 
+  JMenu          simulatorsMenu = new JMenu();    // "Simulators" menu
+  JMenuItem    openMarieSimItem = new JMenuItem();    //       | open MARIE Simulator
+
   JMenu      helpMenu = new JMenu();              // Help menu
   JMenuItem   getHelp = new JMenuItem();          //       | general instructions
   TextFileViewer helpViewer;                      //       |   shown in this viewer
@@ -1100,11 +1103,26 @@ public class MarieDPath extends JFrame {
     helpMenu.add(getHelp);
     helpMenu.add(helpAbout);
 
+    simulatorsMenu.setText("Simulators");
+    openMarieSimItem.setText("MARIE Simulator");
+    openMarieSimItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        new Thread() {
+          public void run() {
+            MarieSim sim = new MarieSim();
+            sim.show();
+          }
+        }.start();
+      }
+    });
+    simulatorsMenu.add(openMarieSimItem);
+
     controlBar.add(fileMenu);
     controlBar.add(runStop);
     controlBar.add(step);
     controlBar.add(setSpeed);
     controlBar.add(setFastFetch);
+    controlBar.add(simulatorsMenu);
     controlBar.add(helpMenu);
     this.setJMenuBar(controlBar);
     
