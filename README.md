@@ -78,10 +78,10 @@ Si no lo tienes, ejecuta el script de configuración. Te pedirá elegir entre in
 ./scripts/linux/build.sh
 ```
 
-- **Windows** — puedes hacer doble clic en `scripts\windows\build.bat`, o ejecutarlo desde una terminal:
+- **Windows** — puedes hacer doble clic en `scripts\windows\build.ps1`, o ejecutarlo desde una terminal:
 
 ```cmd
-scripts\windows\build.bat
+scripts\windows\build.ps1
 ```
 
 ---
@@ -96,10 +96,10 @@ scripts\windows\build.bat
 ./scripts/linux/run.sh
 ```
 
-- **Windows** — puedes hacer doble clic en `scripts\windows\run.bat`, o ejecutarlo desde una terminal:
+- **Windows** — puedes hacer doble clic en `scripts\windows\run.ps1`, o ejecutarlo desde una terminal:
 
 ```cmd
-scripts\windows\run.bat
+scripts\windows\run.ps1
 ```
 
 ---
