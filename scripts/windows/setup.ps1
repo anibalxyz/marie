@@ -1,7 +1,5 @@
-# MARIE Simulator - Script de Configuración para Windows
+﻿# MARIE Simulator - Script de Configuración para Windows
 # Este script ayuda a instalar Java (JRE o JDK) de forma portable o global.
-
-$OutputEncoding = [System.Text.Encoding]::UTF8
 
 function Write-Log($msg)          { Write-Host "[INFO] $msg" -ForegroundColor Blue }
 function Write-Success($msg)      { Write-Host "[OK] $msg" -ForegroundColor Green }
@@ -28,6 +26,7 @@ switch ($typeChoice) {
     }
     "3" {
         Write-Log "Saliendo. No se realizaron cambios."
+        Read-Host "`nPresiona Enter para cerrar"
         exit 0
     }
     default {
@@ -37,8 +36,8 @@ switch ($typeChoice) {
 }
 
 # 2. Verificar si ya existe lo que el usuario eligió
-$portableJava   = Join-Path $projectRoot ".java_runtime\bin\java.exe"
-$portableJavac  = Join-Path $projectRoot ".java_runtime\bin\javac.exe"
+$portableJava  = Join-Path $projectRoot ".java_runtime\bin\java.exe"
+$portableJavac = Join-Path $projectRoot ".java_runtime\bin\javac.exe"
 
 if ($javaType -eq "jdk") {
     $alreadyInstalled = (Test-Path $portableJavac) -or
@@ -51,6 +50,7 @@ if ($javaType -eq "jdk") {
         $continueChoice = Read-Host "Opción [1-2]"
         if ($continueChoice -ne "1") {
             Write-Log "Saliendo. No se realizaron cambios."
+            Read-Host "`nPresiona Enter para cerrar"
             exit 0
         }
     }
@@ -65,6 +65,7 @@ if ($javaType -eq "jdk") {
         $continueChoice = Read-Host "Opción [1-2]"
         if ($continueChoice -ne "1") {
             Write-Log "Saliendo. No se realizaron cambios."
+            Read-Host "`nPresiona Enter para cerrar"
             exit 0
         }
     }
@@ -93,6 +94,7 @@ switch ($installChoice) {
             Invoke-WebRequest -Uri $url -OutFile $zipFile -UseBasicParsing
         } catch {
             Write-Error-Custom "Error al descargar Java. Verifique su conexión a internet."
+            Read-Host "`nPresiona Enter para cerrar"
             exit 1
         }
 
@@ -107,6 +109,7 @@ switch ($installChoice) {
             Write-Error-Custom "Error al extraer los archivos de Java. Asegúrese de tener suficiente espacio en disco."
             Remove-Item -Recurse -Force $tmpDir -ErrorAction SilentlyContinue
             Remove-Item -Force $zipFile -ErrorAction SilentlyContinue
+            Read-Host "`nPresiona Enter para cerrar"
             exit 1
         }
 
@@ -127,6 +130,7 @@ switch ($installChoice) {
             Invoke-WebRequest -Uri $msiUrl -OutFile $installerPath -UseBasicParsing
         } catch {
             Write-Error-Custom "Error al descargar el instalador. Verifique su conexión a internet."
+            Read-Host "`nPresiona Enter para cerrar"
             exit 1
         }
 
@@ -135,19 +139,23 @@ switch ($installChoice) {
             $proc = Start-Process msiexec.exe -ArgumentList "/i `"$installerPath`"" -Wait -PassThru
             if ($proc.ExitCode -ne 0) {
                 Write-Error-Custom "El instalador terminó con un código de error: $($proc.ExitCode)."
+                Read-Host "`nPresiona Enter para cerrar"
                 exit 1
             }
             Write-Success "Instalación global completada con éxito."
         } catch {
             Write-Error-Custom "Error al ejecutar el instalador: $($_.Exception.Message)"
+            Read-Host "`nPresiona Enter para cerrar"
             exit 1
         }
     }
     default {
         Write-Log "Saliendo de la configuración."
+        Read-Host "`nPresiona Enter para cerrar"
         exit 0
     }
 }
 
 Write-Host "`nConfiguración finalizada con éxito." -ForegroundColor Green
 Write-Host "Ahora puedes ejecutar el simulador usando los scripts correspondientes."
+Read-Host "`nPresiona Enter para cerrar"

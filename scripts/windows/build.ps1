@@ -1,4 +1,4 @@
-# MARIE Simulator - Script de Compilación para Windows
+﻿# MARIE Simulator - Script de Compilación para Windows
 # Este script utiliza el Maven Wrapper para compilar el proyecto.
 
 function Write-Log($msg)          { Write-Host "[INFO] $msg" -ForegroundColor Blue }
