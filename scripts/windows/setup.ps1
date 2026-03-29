@@ -89,7 +89,7 @@ switch ($installChoice) {
         $url     = "https://api.adoptium.net/v3/binary/latest/21/ga/windows/x64/$javaType/hotspot/normal/eclipse?project=jdk"
         $zipFile = Join-Path $installDir "java.zip"
 
-        Write-Log "Descargando Java 21 desde Adoptium..."
+        Write-Log "Descargando Java 21 desde Adoptium... (esto puede tardar varios minutos dependiendo de tu conexión)"
         try {
             Invoke-WebRequest -Uri $url -OutFile $zipFile -UseBasicParsing
         } catch {
@@ -122,7 +122,7 @@ switch ($installChoice) {
         Write-Success "Java portable instalado correctamente en $installDir"
     }
     "2" {
-        Write-Log "Iniciando descarga del instalador global..."
+        Write-Log "Iniciando descarga del instalador global... (esto puede tardar varios minutos)"
         $installerPath = Join-Path $env:TEMP "temurin-21-installer.msi"
         $msiUrl = "https://api.adoptium.net/v3/installer/latest/21/ga/windows/x64/$javaType/hotspot/normal/eclipse?project=jdk"
 
@@ -134,7 +134,10 @@ switch ($installChoice) {
             exit 1
         }
 
-        Write-Log "El instalador de Java se abrirá a continuación. Por favor, siga los pasos en pantalla."
+        Write-Log "El instalador de Java se abrirá a continuación."
+        Write-Host "- Recomendado: instalar solo para su usuario (no para todos los usuarios de la máquina)" -ForegroundColor Yellow
+        Write-Host "- Dejar todas las opciones por defecto" -ForegroundColor Yellow
+        Write-Host "- Presionar 'Siguiente' hasta finalizar" -ForegroundColor Yellow
         try {
             $proc = Start-Process msiexec.exe -ArgumentList "/i `"$installerPath`"" -Wait -PassThru
             if ($proc.ExitCode -ne 0) {
